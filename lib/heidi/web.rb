@@ -2,12 +2,15 @@ require 'sinatra/base'
 require 'heidi'
 require 'heidi/shell'
 require 'simple_shell'
+require 'faye'
 
 class Heidi
   class Web < Sinatra::Base
 
     def self.start(host="0.0.0.0", port="4567", project_path=Dir.pwd)
       @project_path = project_path
+      use Faye::RackAdapter, :mount      => '/faye',
+                             :timeout    => 25
       Heidi::Web.run! :host => host, :port => port
     end
 
