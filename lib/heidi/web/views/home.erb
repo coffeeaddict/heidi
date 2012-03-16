@@ -15,21 +15,11 @@
     <h2>Projects</h2>
     <ul class="projects">
       <% projects.sort_by(&:basename).each do |project| %>
-        <li class="<%= project.build_status %>">
-          <a href="/projects/<%= project.basename %>"><%= project.name %></a>
-          <span class="label <%= status2label(project.build_status) %>"><%= project.build_status.empty? ? "unknown" : project.build_status %></span>
-        </li>
+        <%= erb :project_home, :locals => { :project => project } %>
       <% end %>
     </ul>
     <br />
     <a href="/projects/" class="btn btn-success"><strong>+</strong> &nbsp;new project</a>
-      <% projects.each do |project| %>
-        <li class="<%= project.build_status %>">
-          <a href="/projects/<%= project.basename %>"><%= project.name %></a>
-          - <%= project.build_status %>
-        </li>
-      <% end %>
-    </ul>
   </div>
 
   <div class="span4">
@@ -57,3 +47,16 @@
   </div>
 </div>
 </section>
+
+<script type="text/javascript">
+  var home_sub = faye_client.subscribe('/projects/new', function(name) {
+    alert('new project: ' + name);
+    $.get('/projects/' + name + '/home.js', function(data) {
+      $('.projects').append(data);
+    });
+  });
+
+  home_sub.callback(function() {
+    alert('Home subscription is now active!');
+  });
+</script>

@@ -11,8 +11,10 @@ class Heidi
       @project_path = project_path
 
       ::Faye::WebSocket.load_adapter('thin')
-      use ::Faye::RackAdapter, :mount      => '/faye',
-                             :timeout    => 25
+      use ::Faye::RackAdapter,
+        :mount      => '/faye',
+        :timeout    => 25
+
       Heidi::Web.run! :host => host, :port => port
     end
 
@@ -21,6 +23,7 @@ class Heidi
     end
 
     before {
+      $stderr.puts "request"
       @heidi = Heidi.new(self.class.project_path)
       @crumbs = []
     }
@@ -68,13 +71,13 @@ class Heidi
       erb(:project, { :locals => { :project => project }})
     end
 
-    get '/project/:name/home.js' do
+    get '/projects/:name/home.js' do
       project = @heidi[params[:name]]
       if project.nil?
         fail 404
       end
 
-      erb(:project_home, { :locals => { :project => project }})
+      erb(:project_home, { :layout => false, :locals => { :project => project }})
     end
 
     get '/projects/:name/fetch' do

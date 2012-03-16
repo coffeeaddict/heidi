@@ -1,4 +1,5 @@
 require 'heidi'
+require 'heidi/faye'
 require 'simple_shell'
 
 class Heidi
@@ -88,6 +89,10 @@ bundle exec rake spec
       shout "\n"
       shout "Now edit or add some hooks and run: heidi integrate #{name}"
 
+      faye = Heidi::Faye.new
+
+      # TODO : Wait until faye is done publishing
+      faye.publish('/projects/new', name)
     end
 
     def remove_project(name)

@@ -27,6 +27,11 @@
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="/images/favicon.ico">
+
+    <script type="text/javascript" src="/faye.js"></script>
+    <script type="text/javascript">
+      var faye_client = new Faye.Client('http://localhost:4567/faye');
+    </script>
   </head>
 
   <body>
@@ -41,6 +46,7 @@
 
     <div class="container">
       <%= breadcrumbs %>
+      <div id="alerts"></div>
       <%= yield %>
 
     </div> <!-- /container -->
@@ -62,5 +68,11 @@
     <script src="/js/bootstrap-carousel.js"></script>
     <script src="/js/bootstrap-typeahead.js"></script>
 
+
+    <script type="text/javascript">
+      faye_client.subscribe('/messages', function(message) {
+        $('#alerts').append('<div class="alert alert-warning">' + message + '</div>');
+      });
+    </script>
   </body>
 </html>
