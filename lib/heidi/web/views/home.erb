@@ -2,6 +2,7 @@
   ul.projects li { margin-bottom: 5px; }
   ul.projects li a { display: inline-block; min-width: 120px; }
 </style>
+
 <div class="hero-unit">
   <h1>Welcome to Heidi!</h1>
   <p>A simple, naive, yet powerful Continious Integration ... thingy...</p>
@@ -22,6 +23,13 @@
     </ul>
     <br />
     <a href="/projects/" class="btn btn-success"><strong>+</strong> &nbsp;new project</a>
+      <% projects.each do |project| %>
+        <li class="<%= project.build_status %>">
+          <a href="/projects/<%= project.basename %>"><%= project.name %></a>
+          - <%= project.build_status %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 
   <div class="span4">
